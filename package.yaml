@@ -1,7 +1,7 @@
 name:                SilkSpectre
 version:             0.1.0.0
 github:              "githubuser/SilkSpectre"
-license:             BSD3
+license:             MIT
 author:              "Jimmy Royer"
 maintainer:          "jimleroyer@gmail.com"
 copyright:           "2020 Jimmy Royer"

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0c0c54e615bb8ba0ff09a670e77937ca81afe73515d8ccc1d199d2489991962f
+-- hash: 80eebc83c0e4f5e7ee16a02a429785c36ee57beb14f8f55844038dd873cd694b
 
 name:           SilkSpectre
 version:        0.1.0.0

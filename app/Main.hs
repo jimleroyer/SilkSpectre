@@ -1,6 +1,6 @@
 module Main where
 
-import Lib
+import Lib (scrap)
 
 main :: IO ()
-main = someFunc
+main = scrap "https://www.bestbuy.ca/en-ca/product/playstation-5-console-online-only/14962185"

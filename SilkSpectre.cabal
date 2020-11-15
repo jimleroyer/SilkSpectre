@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 80eebc83c0e4f5e7ee16a02a429785c36ee57beb14f8f55844038dd873cd694b
+-- hash: f3007b50e45c7d03ed3ecba95db5aa4ab866f022af60d6c72702f169e128257d
 
 name:           SilkSpectre
 version:        0.1.0.0
@@ -34,6 +34,8 @@ library
       src
   build-depends:
       base >=4.7 && <5
+    , scalpel
+    , text
   default-language: Haskell2010
 
 executable SilkSpectre-exe
@@ -46,6 +48,8 @@ executable SilkSpectre-exe
   build-depends:
       SilkSpectre
     , base >=4.7 && <5
+    , scalpel
+    , text
   default-language: Haskell2010
 
 test-suite SilkSpectre-test
@@ -59,4 +63,6 @@ test-suite SilkSpectre-test
   build-depends:
       SilkSpectre
     , base >=4.7 && <5
+    , scalpel
+    , text
   default-language: Haskell2010

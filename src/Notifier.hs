@@ -9,6 +9,7 @@ module Notifier
 
 import Config (ConfigInfo(..), readConfig)
 import Control.Lens ( (&), (?~), view ) 
+import Data.ByteString.UTF8 as BSU ( toString )
 import Data.Either () 
 import Data.Text ( Text, pack )
 import Network.Wreq
@@ -21,10 +22,11 @@ import Network.Wreq
       statusCode )
 
 
-postSms :: ConfigInfo -> String -> String -> IO Int
-postSms ConfigInfo{to, from, sid, user, key} url shopName = 
+postSms :: ConfigInfo -> String -> IO Int
+postSms ConfigInfo{to, from, sid, user, key} shopName = 
     view (responseStatus.statusCode) <$> _postSms
         where opts = defaults & auth ?~ basicAuth user key
+              url = twilioEndpoint (BSU.toString user)
               _postSms = postWith opts url [partText "To" to, 
                                             partText "From" from,
                                             partText "MessagingServiceSid" sid,
@@ -35,8 +37,13 @@ toEither status
     | status >= 200 || status < 300  = Right "Sent notification"
     | otherwise = Left $ pack ("Could not send notification! Status: " ++ show status)
 
-notify :: String -> String -> IO (Either Text Text)
-notify url shopName = do
+notify :: String -> IO (Either Text Text)
+notify shopName = do
     config <- readConfig "app.config"
-    httpStatus <- postSms config url shopName
+    httpStatus <- postSms config shopName
     return (toEither httpStatus)
+
+twilioEndpoint :: String -> String
+twilioEndpoint userId = "https://api.twilio.com/2010-04-01/Accounts/" ++ 
+                            userId ++ 
+                            "/Messages.json"

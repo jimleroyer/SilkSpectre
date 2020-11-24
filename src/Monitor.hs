@@ -16,16 +16,9 @@ module Monitor
     ) where
 
 import Data.Text ( unpack )
-
 import Notifier (notify)
 import Scrapper (scrape)
 import Trackers ( Tracker(..) )
-
-
--- Constants
-
-twilioEndpoint :: String
-twilioEndpoint = "https://api.twilio.com/2010-04-01/Accounts/AC36e374a5ce9139bcca58fb540c621014/Messages.json"
 
 
 -- Monitor logic
@@ -36,7 +29,7 @@ monitor tracked = do
     case scraped of
         Just _ -> return ["Playstation is still unavailable at " ++ name ++ "... :("]
         Nothing -> do
-            notified <- notify twilioEndpoint name
+            notified <- notify name
             case notified of
                 Right msg -> return ["Playstation available at " ++ name ++ "! " ++ unpack msg]
                 Left msg -> return ["Playstation available at " ++ name ++ "!.. alas.. " ++ unpack msg]

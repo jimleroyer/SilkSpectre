@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 27ae706466d1bd4dec616ffb6b58a2992b5a573659be29bed96f4f7aff7c2cf2
+-- hash: f6af3a07b8570ed5d0af328b2b3a9b6f1d33814437c79f94a79f69f8095a0f01
 
 name:           SilkSpectre
 version:        0.1.0.0
@@ -28,7 +28,6 @@ source-repository head
 library
   exposed-modules:
       Config
-      Lib
       Monitor
       Notifier
       Scrapper

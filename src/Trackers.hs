@@ -54,7 +54,7 @@ bestBuy = Track {..}
         tUrl = "https://www.bestbuy.ca/en-ca/product/playstation-5-console-online-only/14962185"
         tTarget = TScraper $ chroot ("p" @: [hasClass "messageDetails_238LF"]) $ do
                     contents <- text anySelector
-                    guard ("sold outttt" `isInfixOf` contents)
+                    guard ("sold out" `isInfixOf` contents)
                     texts anySelector
 
 ebgames :: Tracker

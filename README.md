@@ -1,7 +1,7 @@
 # SilkSpectre
 
-One goal: watch item's sale for availability, specifically for Playstation 5 
-availability as configured by the application right now.
+**One goal**: watch item's sale for availability, specifically for **Playstation 5
+availability** as configured by the application right now.
 
 The application at this moment watches for Canadian websites of Amazon, BestBuy,
 EBGames and Walmart. When availability is detected, a text notification is sent

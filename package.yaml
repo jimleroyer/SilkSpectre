@@ -21,8 +21,17 @@ description:         Please see the README on GitHub at <https://github.com/gith
 
 dependencies:
 - base >= 4.7 && < 5
-- text
+- aeson
+- bytestring
+- ConfigFile
+- http-types
+- lens
+- mtl
 - scalpel
+- text
+- todo
+- utf8-string
+- wreq
 
 library:
   source-dirs: src
@@ -35,7 +44,8 @@ executables:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
-    "$everything": -haddock
+    - -haddock 
+    - -O2
     dependencies:
     - SilkSpectre
 

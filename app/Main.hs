@@ -1,6 +1,12 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Main where
 
-import Lib (scrap)
+import Control.Monad (forM_)
+import Monitor(monitor)
+import Trackers(tracked)
 
 main :: IO ()
-main = scrap "https://www.bestbuy.ca/en-ca/product/playstation-5-console-online-only/14962185"
+main = forM_ tracked track
+    where track t = do
+            ss <- monitor t
+            forM_ ss putStrLn

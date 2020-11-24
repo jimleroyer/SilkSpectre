@@ -3,11 +3,24 @@
 # For more information, please see the documentation at:
 #   https://docs.haskellstack.org/en/stable/lock_files
 
-packages: []
+packages:
+- completed:
+    hackage: regex-posix-clib-2.7@sha256:998fca06da3d719818f0691ef0b8b9b7375afeea228cb08bd9e2db53f96b0cd7,1232
+    pantry-tree:
+      size: 524
+      sha256: 5bf20952472d930323766d250f5fbbe3fe6f2cd3d931e5cf7b62a238ab2099ff
+  original:
+    hackage: regex-posix-clib-2.7
+- completed:
+    hackage: todo-0.2.0.2@sha256:a80b711db67d000ac929d35bcecfe3d22b5e3231f958bcf61cb447ba03e18ad4,722
+    pantry-tree:
+      size: 253
+      sha256: 517cf2e9d8c0a21d0244902e378ab1e09203ad57b3f12fd7167c78e40fad1a65
+  original:
+    hackage: todo-0.2.0.2@sha256:a80b711db67d000ac929d35bcecfe3d22b5e3231f958bcf61cb447ba03e18ad4,722
 snapshots:
 - completed:
-    size: 532413
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/16/21.yaml
-    sha256: 7b5cac89352fa4a88606dc6cb250aee9291f21e2e988d464065f5aa51f5de33d
-  original:
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/16/21.yaml
+    size: 532414
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/16/22.yaml
+    sha256: e483fb88549fc0f454c190979bf35ac91c7aceff2c0e71e7d8edd11842d772d8
+  original: lts-16.22

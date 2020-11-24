@@ -1,0 +1,13 @@
+cradle:
+  stack:
+    - path: "./src"
+      component: "SilkSpectre:lib"
+
+    - path: "./app/Main.hs"
+      component: "SilkSpectre:exe:SilkSpectre-exe"
+
+    - path: "./app/Paths_SilkSpectre.hs"
+      component: "SilkSpectre:exe:SilkSpectre-exe"
+
+    - path: "./test"
+      component: "SilkSpectre:test:SilkSpectre-test"

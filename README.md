@@ -11,11 +11,23 @@ Configuration should be stored in the *app.config* file, as showed by the
 example file *app.config.example*. Copy the latter, replace values and rename
 the file. 
 
-The `continually.ps` script is provided as a replacement of the not so great
-Microsoft Windows Scheduler. It just need to repeat every X seconds as defined
-in the script and the latter provides much better traces with timestamps.
+The [prerender](https://github.com/prerender/prerender-node) node web 
+middleware should be ran as well. That is to render 100% websites that requires
+Javascript to generate their HTML DOM. Install node and execute:
 
-Now we just need to get a PlayStation 5 using this program.
+```
+cd SilkSpectre
+npm install 
+node .\prerender\prerender.js
+```
+
+The `continually.ps` script is provided as a replacement of the not-so-great
+Microsoft Windows Scheduler. This thing is hard to configure, might not work,
+and doesn't provide nice traces of the application's execution. All things 
+that are included in the provided script: it just works (with PowerShell, 
+ that is -- if you are on a \*nix platform, you can't complain with `cron`).
+
+**Now we just need to get a PlayStation 5 using this program.**
 
 # Known bugs
 

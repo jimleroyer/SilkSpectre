@@ -1,7 +1,7 @@
 ###############################################################################
 # Use this PowerShell script to execute the SilkSpectre script every
 # 120 seconds (or configure the seconds parameter for a different waiting)
-# period. 
+# period.
 #
 # The task scheduler on Windows did not work for me at all. I missed the
 # cron utility but a simple script does the job for the immediate needs.
@@ -20,6 +20,8 @@ Function Execute-Command () {
     )
 
     $FullCommandPath = (Get-ChildItem -Path $CommandPath).FullName
+    $FullCommandDir = $FullCommandPath.directoryName
+    # $CommandName = $FullCommandPath.name
 
     Try {
         $pinfo = New-Object System.Diagnostics.ProcessStartInfo
@@ -27,6 +29,8 @@ Function Execute-Command () {
         $pinfo.RedirectStandardError = $true
         $pinfo.RedirectStandardOutput = $true
         $pinfo.UseShellExecute = $false
+        $pinfo.CreateNoWindow = $true
+        $pinfo.WorkingDirectory = $FullCommandDir
         $pinfo.Arguments = $CommandArguments
         $p = New-Object System.Diagnostics.Process
         $p.StartInfo = $pinfo
@@ -62,19 +66,25 @@ function continually() {
 
     for (; ; ) {
         try {
-            $CmdOutput = Execute-Command -CommandTitle "PS5 Avail Check" -CommandPath $CommandPath
+            # $CmdOutput = Execute-Command -CommandTitle "PS5 Avail Check" -CommandPath $CommandPath
+            $CmdOutput = Invoke-Expression -Command $CommandPath
+
+            $arr = $CmdOutput.trim().split([Environment]::NewLine)
+            foreach ($line in $arr) {
+                -join ((Get-Date -Format "dddd MM/dd/yyyy HH:mm - "), $line)
+            }
 
             # If error...
-            if ($CmdOutput.ExitCode -ne 0) {
-                -join ("Error (exit code: ", $CmdOutput.ExitCode, "): ", $CmdOutput.stderr)
-            }
-            # else success...
-            else {
-                $arr = $CmdOutput.stdout.trim().split([Environment]::NewLine)
-                foreach ($line in $arr) {
-                    -join ((Get-Date -Format "dddd MM/dd/yyyy HH:mm - "), $line)
-                }
-            }
+            # if ($CmdOutput.ExitCode -ne 0) {
+            #     -join ("Error (exit code: ", $CmdOutput.ExitCode, "): ", $CmdOutput.stderr)
+            # }
+            # # else success...
+            # else {
+            #     $arr = $CmdOutput.stdout.trim().split([Environment]::NewLine)
+            #     foreach ($line in $arr) {
+            #         -join ((Get-Date -Format "dddd MM/dd/yyyy HH:mm - "), $line)
+            #     }
+            # }
         }
         catch {
             -join ("Could not execute the command: unknown error")

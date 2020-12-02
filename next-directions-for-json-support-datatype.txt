@@ -1,0 +1,181 @@
+https://discordapp.com/channels/280033776820813825/505367988166197268/783203330616328192
+
+I am figuring out what would be the best approach for extension and API for a current beginner's level project. I want to scrape websites/web services with either HTML or JSON. Each website would have its own specific extraction mechanism (get a dialog box content or get a specific field in a JSON object tree). 
+
+In OOP, I could have a Website interface with concrete implementation like Google or Amazon that would have scraping extraction mechanism defined in their overridden methods. Or I could have Strategy pattern for each extraction mechanism.. but they would still stick to one website (no need to switch implementation for one website). 
+
+What would be Haskell FP way of doing that? The simplest I can think of is a Website data type with a record that could have an Extractor algebraic data type (JSON ... | HTML ...) as well, and when I define a data instance, I write down the scraping logic with the extractor field.
+
+Else I am eyeing typeclasses, as these would be like interfaces, but then, I am a bit lost how that would be properly done.
+
+What would you do? just need directions if you are willing to give your input. Thank you. 
+
+edmundnobleToday at 12:08 AM
+Okay so a straightforward translation of what you did in OOP
+[12:08 AM]
+Is to define a datatype ScrapeWebsite in Haskell(edited)
+[12:09 AM]
+data ScrapeWebsite = ScrapeWebsite
+  { scrape :: ...
+  }
+(edited)
+[12:09 AM]
+Sort of idea
+[12:09 AM]
+Where scrape is something which does the actual scraping
+[12:09 AM]
+And perhaps functions like:
+google :: ScrapeWebsite
+amazon :: ScrapeWebsite
+
+which provide different ways to do the scraping
+[12:10 AM]
+And then pass around values of type ScrapeWebsite to functions that want to abstract over how they do scraping
+[12:10 AM]
+That's almost exactly the same as in OOP but it makes it more obvious that... what you're doing with the "Strategy pattern" is just functional programming
+[12:11 AM]
+Type classes are specifically for when you want to attach behaviors to types; I fail to see why that would make sense here
+[12:11 AM]
+Just pass around the behavior
+[12:11 AM]
+You can also have a Website datatype but that "closes the world" in that you can't scrape any websites which aren't cases of that datatype
+[12:11 AM]
+The above ScrapeWebsite version doesn't, just like the "OOP version"
+
+CascadarToday at 12:13 AM
+Class is just record (or isn't it?)(edited)
+
+jlrToday at 12:14 AM
+thanks for your answer @edmundnoble
+[12:16 AM]
+It's sort of what I have at the moment:
+https://github.com/jimleroyer/SilkSpectre/blob/main/src/Trackers.hs
+
+Except I'd need to expand my Target data type in there to also accept JSON, if I understand this correctly. (Tracker being equivalent to ScrapeWebsite and Target would be sort of the lens that would extract out of the HTML or JSON). Does that make sense?
+
+edmundnobleToday at 12:19 AM
+How are these used?
+[12:20 AM]
+Woo 
+
+1
+[12:20 AM]
+Okay so
+[12:20 AM]
+main :: IO ()
+main = forM_ tracked track
+    where track t = do
+            ss <- monitor t
+            forM_ ss putStrLn
+(edited)
+[12:21 AM]
+So this is the idea eh
+
+jlrToday at 12:21 AM
+the main idea yeah hehehe
+
+edmundnobleToday at 12:21 AM
+Lmao
+[12:21 AM]
+Ok so you start the program
+[12:21 AM]
+Then it scrapes all of the tracked websites
+[12:22 AM]
+And prints out all the results
+[12:22 AM]
+Is that right
+[12:22 AM]
+Then it exits
+
+jlrToday at 12:23 AM
+Scrapes the websites, but only results will get returned based on presence of conditions in the HTML at the moment. Ultimately, I want to add a more explicit check (such as inventory > 0 from the returned HTML text or JSON).
+[12:25 AM]
+        tExtractor = EScraper $ chroot ("div" @: ["id" @= "availability"]) $ do
+                    contents <- text anySelector
+                    guard ("Currently unavailable" `isInfixOf` contents)
+                    texts anySelector
+
+The guard here is the current check at the moment. Eventually, I just want this to return the text though and make a check outside of that scraping/extraction step. That would be more flexible for me.
+
+edmundnobleToday at 12:25 AM
+Okay
+[12:25 AM]
+Here is my modest proposal
+[12:25 AM]
+Actually first a question
+[12:26 AM]
+Do you intend to change this program such that it instead is a continually running service that is periodically checking the websites?
+[12:26 AM]
+Just asking out of curiosity, seems like a logical next step
+
+jlrToday at 12:27 AM
+Yes.. although right now, I achieve this  with a PowerShell script at the root of the project.
+[12:27 AM]
+sub-optimal but working for now, I am a haskell newb so I take it step by step heh
+
+edmundnobleToday at 12:28 AM
+Okay sure
+[12:28 AM]
+Alright so
+[12:28 AM]
+Each of these trackers conceptually is something that does some interaction with the outside world and may (or may not) produce a Text, yeah?(edited)
+[12:29 AM]
+Oh actually it just produces a Bool eh
+[12:29 AM]
+Indicating whether or not the PS5 is available at the website(edited)
+[12:30 AM]
+Oh and you want to know which site it was
+
+jlrToday at 12:30 AM
+affirmative 
+
+edmundnobleToday at 12:30 AM
+So let's say a tracker is an IO (Maybe Text)
+[12:30 AM]
+Now you can write all sorts of utility functions to produce an IO (Maybe Text)
+[12:31 AM]
+Maybe you write something like:
+htmlTracker :: String -> String -> Scraper Text [Text] -> IO (Maybe Text)
+[12:32 AM]
+Basically, what scrape is doing, but you do it earlier, in the Trackers file
+[12:32 AM]
+Then you can have any sort of tracker you want as long as you can convert it into the interface you need, namely IO (Maybe Text)
+[12:33 AM]
+And there's no "bottleneck" where you have to make changes if you want a new type of tracker(edited)
+[12:33 AM]
+You just add a new function taking some inputs and producing a tracker
+[12:34 AM]
+Basically what I'm saying is that you can avoid listing all of the ways to track things in a datatype, cause it isn't paying for itself
+
+jlrToday at 12:34 AM
+Yeah I follow you, that makes sense. The only thing I need on top of that is to abstract Scraper, because this is specific to Scalpel and I want either JSON or HTML to get returned with whatever library that I can use.
+
+edmundnobleToday at 12:34 AM
+Maybe you just write a jsonTracker
+[12:34 AM]
+etc
+
+jlrToday at 12:34 AM
+yes
+
+edmundnobleToday at 12:35 AM
+Sure, I'm just saying that the IO (Maybe Text) API is already sufficiently abstract, cause that's actually all you need in the end, and there are countless ways to produce it, which you don't need to enumerate
+
+Basically what I'm saying is that you can avoid listing all of the ways to track things in a datatype, cause it isn't paying for itself
+
+jlr replied to edmundnobleToday at 12:35 AM
+Yes that is  my impression as well (to avoid telling a data type how to track things). I would like that (to avoid it).(edited)
+
+edmundnobleToday at 12:36 AM
+Aight so, any questions about this approach?
+
+jlrToday at 12:37 AM
+humm I will save that conversation and go to bed, it's getting late here  But I will ponder on this. Showing me the way is half of it for me. Thank you. 
+
+edmundnobleToday at 12:37 AM
+Np, feel free to ask more
+[12:37 AM]
+Any time :)
+
+jlrToday at 12:38 AM
+I'll come back for sure! (especially if I want to run that program in the background and not stop it.. I would like parallel execution too!). 

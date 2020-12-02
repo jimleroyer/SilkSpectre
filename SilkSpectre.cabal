@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f6af3a07b8570ed5d0af328b2b3a9b6f1d33814437c79f94a79f69f8095a0f01
+-- hash: d40452b26b565dd36e91de23010e917313c2706a4ea2e1ea39e980ff5db61873
 
 name:           SilkSpectre
 version:        0.1.0.0
@@ -28,19 +28,22 @@ source-repository head
 library
   exposed-modules:
       Config
+      Inventory
       Monitor
       Notifier
-      Scrapper
-      Trackers
+      Scraper
   other-modules:
       Paths_SilkSpectre
   hs-source-dirs:
       src
   build-depends:
       ConfigFile
+    , Decimal
     , aeson
+    , aeson-pretty
     , base >=4.7 && <5
     , bytestring
+    , containers
     , http-types
     , lens
     , mtl
@@ -60,10 +63,13 @@ executable SilkSpectre-exe
   ghc-options: -threaded -rtsopts -with-rtsopts=-N -haddock -O2
   build-depends:
       ConfigFile
+    , Decimal
     , SilkSpectre
     , aeson
+    , aeson-pretty
     , base >=4.7 && <5
     , bytestring
+    , containers
     , http-types
     , lens
     , mtl
@@ -84,10 +90,13 @@ test-suite SilkSpectre-test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       ConfigFile
+    , Decimal
     , SilkSpectre
     , aeson
+    , aeson-pretty
     , base >=4.7 && <5
     , bytestring
+    , containers
     , http-types
     , lens
     , mtl

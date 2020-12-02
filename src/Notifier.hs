@@ -44,6 +44,6 @@ notify shopName = do
     return (toEither httpStatus)
 
 twilioEndpoint :: String -> String
-twilioEndpoint userId = "https://api.twilio.com/2010-04-01/Accounts/" ++ 
-                            userId ++ 
-                            "/Messages.json"
+twilioEndpoint userId = "https://api.twilio.com/2010-04-01/Accounts/"
+                            ++ userId
+                            ++ "/Messages.json"

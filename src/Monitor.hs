@@ -17,15 +17,15 @@ module Monitor
 
 import Data.Text ( unpack )
 import Notifier (notify)
-import Scrapper (scrape)
-import Trackers ( Tracker(..) )
+import Scraper (scrape)
+import Inventory ( Website(..) ) 
 
 
--- Monitor logic
+-- Monitor a website
 
-monitor :: Tracker -> IO [[Char]]
-monitor tracked = do
-    scraped <- scrape url target
+monitor :: Website -> IO [[Char]]
+monitor website = do
+    scraped <- scrape website
     case scraped of
         Just _ -> return ["Playstation is still unavailable at " ++ name ++ "... :("]
         Nothing -> do
@@ -33,6 +33,4 @@ monitor tracked = do
             case notified of
                 Right msg -> return ["Playstation available at " ++ name ++ "! " ++ unpack msg]
                 Left msg -> return ["Playstation available at " ++ name ++ "!.. alas.. " ++ unpack msg]
-    where name = tName tracked
-          url = tUrl tracked
-          target = tTarget tracked
+    where name = show $ wName website

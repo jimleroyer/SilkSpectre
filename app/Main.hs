@@ -3,10 +3,10 @@ module Main where
 
 import Control.Monad (forM_)
 import Monitor(monitor)
-import Trackers(tracked)
+import Inventory(websites)
 
 main :: IO ()
-main = forM_ tracked track
-    where track t = do
-            ss <- monitor t
+main = forM_ websites track
+    where track w = do
+            ss <- monitor w
             forM_ ss putStrLn
